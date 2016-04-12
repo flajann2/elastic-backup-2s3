@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+ESS_PATH = File.expand_path '..', File.dirname(__FILE__)
+ESS_EXECUTABLE = File.expand_path 'bin/es-snapshot', Dir.pwd
+
+$:.unshift File.join([ESS_PATH, 'lib'])
+
+require 'elastic-backup-2s3/cli'
+
+ElasticBackup::Cli::Main.start

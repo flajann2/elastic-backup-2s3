@@ -2,6 +2,12 @@
 
 require 'rubygems'
 require 'bundler'
+require 'semver'
+
+def s_version
+  SemVer.find.format "%M.%m.%p%s"
+end
+
 begin
   Bundler.setup(:default, :development)
 rescue Bundler::BundlerError => e
@@ -17,10 +23,13 @@ Juwelier::Tasks.new do |gem|
   gem.name = "elastic-backup-2s3"
   gem.homepage = "http://github.com/flajann2/elastic-backup-2s3"
   gem.license = "MIT"
+  gem.version = s_version
   gem.summary = %Q{TODO: one-line summary of your gem}
   gem.description = %Q{TODO: longer description of your gem}
   gem.email = "lordalveric@yahoo.com"
   gem.authors = ["Fred Mitchell"]
+  gem.required_ruby_version = '>= 2.0'
+
   # dependencies defined in Gemfile
 end
 Juwelier::RubygemsDotOrgTasks.new
