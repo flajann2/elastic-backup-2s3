@@ -9,6 +9,11 @@ module ElasticBackup
       [bucket, path, snapshot]
     end
 
+    def self.elastic
+
+
+    def self.get_index_list
+    end
 
   end
 end
