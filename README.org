@@ -12,7 +12,24 @@
   snapshots. I may add support at a later date. Or
   feel free to add it and do a pull request.
 
-** TODO Overview
+** Overview
+   Elastic Backup simply allows you to specifiy some
+   or all of the indicies, some target bucket, and 
+   run the backup / snapshot.
+
+   It hides all the sordid details about "registration"
+   and the like, and will optionally clean up behind 
+   itself and remove the registration if you did not
+   specify a name for the registration.
+
+   The snapshot name, if not specified, will 
+   automatically be generated in the ISO date and time
+   format, with dashes substituting for the other
+   non-digit characters, wthe the date and time
+   seperated by an underscore. For instance:
+
+   2016-04-13_06-56-58
+
 ** TODO Documentation
 ** TODO Examples
 ** Contributing to elastic-backup-2s3
