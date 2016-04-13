@@ -3,10 +3,13 @@ require 'elastic-backup-2s3'
 require_relative 'cli/delete'
 require_relative 'cli/list'
 
-
 module ElasticBackup
   module Cli
     class Main < Thor
+      long_desc <<-LONGDESC
+        Main long desc
+      LONGDESC
+
       class_option :verbose, type: :numeric, 
                    banner: '[1|2|3]',
                    desc: "Verbosity setting.",
@@ -39,6 +42,13 @@ module ElasticBackup
       desc 'monitor', 'Monitor the progress of an ongoing snapshot or restore.'
       def monitor
       end
+
+      desc 'delete', 'Delete snapshots, indicies, registrations'
+      subcommand 'delete', Delete
+
+      desc 'list', 'list indicies, snapshots'
+      subcommand 'list', List
+
 
       no_commands do
         def massage(options)
