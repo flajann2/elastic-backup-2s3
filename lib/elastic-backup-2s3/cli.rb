@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
 require 'elastic-backup-2s3'
+require_relative 'cli/snapshot'
+require_relative 'cli/restore'
+require_relative 'cli/delete'
+require_relative 'cli/list'
 
-include ElasticBackup::DSL
 
 module ElasticBackup
   module Cli
     class Main < Thor
       class_option :verbose, type: :numeric, banner: '[1|2|3]', aliases: '-v', default: 0
 
-      desc 'play [script]', 'Run the powerplay script.'
+      desc 'snapshot [script]', 'Backups Elasticsearch indices to S3'
       long_desc <<-LONGDESC
-        Plays a PowerPlay script. The entries in the
-        script, as specified inside of a group, are run
-        in parallel by default.
-
-        if [script] is not given, it defaults to 'stack.play'
-        in the current directory.
+        
       LONGDESC
       option :tmux,      type: :numeric, aliases: '-m', banner: "[WINDOWNUMBERopt]", lazy_default: 0,
                                                         desc: ' Send output to all tmux panes in the current window, or the numeric window specified.'
@@ -36,12 +34,16 @@ module ElasticBackup
       option :sktags,    type: :array,   aliases: ['--skip-tags', '-T'],
                                                         banner: %(<TAG1>[ TAG2 TAG3...]), 
                                                         desc: "Ansible tags to skip - mutually exclusive with --tags"
-      def play(script = 'stack.play')
+      def snapshot(script = 'stack.play')
         DSL::_global[:options] = massage options
         puts "script %s " % [script] if DSL::_global[:options][:verbose] >= 1
         load script, true
         pp DSL::_global if DSL::_verbosity >= 3
         Play::Ansible::power_run
+      end
+
+      desc 'restore', 'Restore indices from S3 to Elasticsearch.'
+      def restore
       end
       
       desc 'ttys', 'list all the TMUX ptys on the current window.'
