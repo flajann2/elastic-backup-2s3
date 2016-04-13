@@ -32,6 +32,13 @@
 
 ** TODO Documentation
 ** TODO Examples
+** Scratchpad
+   My own personal notes on this project. These
+   are not gauranteed to be useful to you nor 
+   up-to-date.
+*** s3url format
+    s3://BUCKET/path/in/bucket:SNAPSHOT
+
 ** Contributing to elastic-backup-2s3
 
 + Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
