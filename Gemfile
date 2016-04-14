@@ -3,6 +3,9 @@ source "https://rubygems.org"
 gem "semver", "~> 1"
 gem "aws-sdk", "~> 2"
 gem "elasticsearch", "~> 1"
+gem "multi_json",  "~> 1"
+gem "faraday",  "~> 0"
+gem "activesupport", "~> 4"
 
 group :development do
   gem "rspec", "~> 2.8.0"

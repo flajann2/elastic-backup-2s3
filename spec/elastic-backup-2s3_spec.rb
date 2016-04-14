@@ -1,8 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
-
+require_relative 'spec_helper'
 
 include ElasticBackup
-
 
 S3URL = "s3://mybucket/my/path:my_snapshot"
 S3URL2 = "s3://mybucket/my/path"
@@ -22,5 +20,8 @@ describe Snapshot do
     expect(snapshot).to eq(nil)
   end
 
+  it "has a valid s3 resource" do
+    expect(Snapshot.s3).to_not be nil
+  end
 end
 
