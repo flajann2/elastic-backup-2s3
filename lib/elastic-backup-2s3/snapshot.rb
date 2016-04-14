@@ -5,7 +5,6 @@ module ElasticBackup
         @s3 ||= Aws::S3::Resource.new
       end
 
-
       # Take the s3 url and break it down to
       # its components [BUCKET, PATH, SNAPSHOT]
       def s3url_splice(surl)
@@ -14,11 +13,18 @@ module ElasticBackup
         raise "Protocol must be 's3' in #{surl}" unless protocol.downcase == 's3'
         [bucket, path, snapshot]
       end
-  
-      def elastic
+ 
+      def esurl(suri: 'localhost', port: 9200)
+        _suri, _port = suri.split(':') 
+        "http://#{_suri}:#{_port || port}"
       end
-  
-  
+
+      # The first time this is called must have a 
+      # valid esurl!!!!
+      def elastic(esurl = nil)
+        @elastic ||= ESClient.new esurl
+      end
+
       def get_index_list
       end
     end
@@ -32,8 +38,6 @@ module ElasticBackup
       end
 
       def perform_request(method, path, params, body)
-        puts "--> #{method.upcase} #{path} #{params} #{body}"
-
         conn.run_request method.downcase.to_sym, path,
         ( body ? MultiJson.dump(body) : nil ),
         {'Content-Type' => 'application/json'}

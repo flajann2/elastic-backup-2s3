@@ -31,7 +31,7 @@ module ElasticBackup
                    aliases: '-u',
                    desc: "Dry run, do not actually execute."
 
-      desc 'snapshot [script]', 'Backups Elasticsearch indices to S3'
+      desc 'snapshot [ES S3URL]', 'Backups Elasticsearch indices to S3'
       def snapshot(es: 'localhost', surl: nil)
       end
 
@@ -48,7 +48,6 @@ module ElasticBackup
 
       desc 'list', 'list indicies, snapshots'
       subcommand 'list', List
-
 
       no_commands do
         def massage(options)

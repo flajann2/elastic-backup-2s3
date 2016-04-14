@@ -23,5 +23,11 @@ describe Snapshot do
   it "has a valid s3 resource" do
     expect(Snapshot.s3).to_not be nil
   end
+
+  it "esurl defaults nicely" do
+    expect(Snapshot.esurl).to  eq('http://localhost:9200')
+    expect(Snapshot.esurl port: 5900).to  eq('http://localhost:5900')
+    expect(Snapshot.esurl suri: 'localhost:5900').to  eq('http://localhost:5900')
+  end
 end
 
