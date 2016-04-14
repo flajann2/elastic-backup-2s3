@@ -21,7 +21,14 @@ describe Snapshot do
   end
 
   it "has a valid s3 resource" do
-    expect(Snapshot.s3).to_not be nil
+    expect(s3 = Snapshot.s3).to_not be nil
+    s3.buckets.each do |b|
+      pp b
+    end    
+  end
+
+  it "has a valid Elastic resource" do
+    expect(Snapshot.elastic).to_not be nil
   end
 
   it "esurl defaults nicely" do
