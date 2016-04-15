@@ -59,13 +59,28 @@ module ElasticBackup
         cmd = { 
           repository: opt[:repo], 
           snapshot: snapname,
-          body: {
-            wait_for_completion: opt[:wait],
-            master_timeout: opt[:timeout],
-            }}
+          wait_for_completion: opt[:wait],
+          master_timeout: opt[:timeout],
+          body: {}}
         cmd[:body][:indices] = opt[:indices].join(',') unless opt[:indices].nil?
         ap cmd if opt[:dryrun] || (opt[:verbose] >= 2)
-        ret = MultiJson.load elastic.snapshot.create(cmd)
+        ret = MultiJson.load elastic.snapshot.create(cmd) unless opt[:dryrun]
+        ap ret unless opt[:verbose] < 2
+        raise "Error #{ret['status']} detected: #{ret['error']}" unless ret['error'].nil?
+      end
+
+      def initiate_restore s3url
+        _ignore, _ignore, snapname = s3url_splice s3url
+        raise "Must specify :SNAPSHOTNAME at the end of your S3URL #{s3url}" if snapname.nil?
+
+        cmd = { 
+          repository: opt[:repo], 
+          snapshot: snapname,
+          wait_for_completion: opt[:wait],
+          master_timeout: opt[:timeout]
+        }
+        ap cmd if opt[:dryrun] || (opt[:verbose] >= 2)
+        ret = MultiJson.load elastic.snapshot.restore(cmd) unless opt[:dryrun]
         ap ret unless opt[:verbose] < 2
         raise "Error #{ret['status']} detected: #{ret['error']}" unless ret['error'].nil?
       end
