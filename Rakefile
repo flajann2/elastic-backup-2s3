@@ -24,9 +24,23 @@ Juwelier::Tasks.new do |gem|
   gem.homepage = "http://github.com/flajann2/elastic-backup-2s3"
   gem.license = "MIT"
   gem.version = s_version
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "lordalveric@yahoo.com"
+  gem.summary = %Q{Elasticsearch to AWS S3 Backup, Snapshotting, and Restore Tool}
+  gem.description = %Q{
+  I simply want to be able to control the backup and
+  restoration of the Elasticsearch cluster to S3
+  without any fuss or having to dilly around with
+  curl -XPUTS and friends.
+
+  So here it is, and I make no apologies about not 
+  supporting the "shared volume" option of Elasticsearch
+  snapshots. I may add support at a later date. Or
+  feel free to add it and do a pull request.
+
+  There are many features I wish to add to this, and
+  if you have any suggestions, please feel free to send
+  them my way!}
+
+  gem.email = "fred.mitchell@gmx.de"
   gem.authors = ["Fred Mitchell"]
   gem.required_ruby_version = '>= 2.0'
 
