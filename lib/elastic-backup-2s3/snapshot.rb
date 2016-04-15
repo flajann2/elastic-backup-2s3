@@ -47,7 +47,9 @@ module ElasticBackup
               base_path: base_path
             }}}
         ap cmd if opt[:dryrun] || (opt[:verbose] >= 2)
-        elastic.snapshot.create_repository(cmd) unless opt[:dryrun]
+        ret = MultiJson.load elastic.snapshot.create_repository(cmd) unless opt[:dryrun]
+        ap ret unless opt[:verbose] < 2
+        raise "Error #{ret['status']} detected: #{ret['error']}" unless ret['error'].nil?
       end
 
       def initiate_snapshot s3url
@@ -63,7 +65,9 @@ module ElasticBackup
             }}
         cmd[:body][:indices] = opt[:indices].join(',') unless opt[:indices].nil?
         ap cmd if opt[:dryrun] || (opt[:verbose] >= 2)
-        elastic.snapshot.create(cmd)
+        ret = MultiJson.load elastic.snapshot.create(cmd)
+        ap ret unless opt[:verbose] < 2
+        raise "Error #{ret['status']} detected: #{ret['error']}" unless ret['error'].nil?
       end
 
       # Do a snapshot of an elasticsearch cluster
