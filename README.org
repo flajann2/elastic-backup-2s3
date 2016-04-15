@@ -26,6 +26,19 @@
    itself and remove the registration if you did not
    specify a name for the registration.
 
+** Installation
+
+   To install from command line:
+   #+begin_src bash
+   gem install elastic-backup-2s3
+   #+end_src
+
+   For a Gemfile entry:
+   #+begin_src ruby
+   gem  'elastic-backup-2s3'
+   #+end_src
+
+
 ** TODO Documentation
    Documentation is comming. Basically,
    just running the command without any parameters
