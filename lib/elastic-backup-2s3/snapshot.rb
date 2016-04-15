@@ -1,8 +1,18 @@
+# -*- coding: utf-8 -*-
 module ElasticBackup
   module Snapshot
     class << self
       def s3
         @s3 ||= Aws::S3::Resource.new
+      end
+
+      def opt
+        @opt
+      end
+
+      # We only need to set this once anyway
+      def set_opts(options)
+        @opt ||= options
       end
 
       # Take the s3 url and break it down to
@@ -25,7 +35,44 @@ module ElasticBackup
         @elastic ||= ESClient.new esurl
       end
 
-      def get_index_list
+      # For now, this will overwrite the repo if it is
+      # there already.
+      def set_repository s3url
+        bucket, base_path, snapname = s3url_splice s3url
+        raise "Must specify :SNAPSHOTNAME at the end of your S3URL #{s3url}" if snapname.nil?
+        settings = { 
+          bucket: bucket,
+          base_path: base_path
+        }
+        settings[:indices] = opt[:indices].join(',') unless opt[:indices].nil?
+
+        cmd = { repository: opt[:repo], 
+          snapshot: snapname,
+          body: {
+            type: 's3',
+            wait_for_completion: opt[:wait],
+            master_timeout: opt[:timeout],
+            settings: settings}}
+        ap cmd if opt[:dryrun] || (opt[:verbose] >= 2)
+
+        elastic.snapshot.create(cmd) unless opt[:dryrun]
+      end
+
+      # Do a snapshot of an elasticsearch cluster
+      def snapshot esurl, s3url, options
+        elastic esurl
+        set_opts(options)
+        set_repository s3url
+
+        # Set registration
+        # Initiate the backup
+        # Wait and monitor
+      end
+      
+      def restore s3url, esurl, options
+        elastic esurl
+        set_opts(options)
+        set_repository s3url
       end
     end
 

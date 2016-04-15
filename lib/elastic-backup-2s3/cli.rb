@@ -15,12 +15,18 @@ module ElasticBackup
                    desc: "Verbosity setting.",
                    aliases: '-v', default: 0
 
-      class_option :reg, type: :string, 
+      class_option :repo, type: :string, 
                    aliases: '-r',
                    banner: "[NAME]",
-                   desc: "Registration name to use."
+                   default: 'elastic-backup',
+                   desc: "Repository name to use."
 
       class_option :monitor, type: :boolean, aliases: '-m', desc: "Monitor the progress.", default: false
+      class_option :wait, type: :boolean, aliases: '-w', desc: "Wait for completion.", default: false
+      class_option :timeout, type: :numeric,
+                   banner: '[SECONDS]',
+                   desc: "Explicit operation timeout for connection to master node.",
+                   aliases: '-t', default: 60
 
       class_option :indicies,  type: :array,   aliases: ['-i', '--indexes'],
                    banner: "[INDEX1[ INDEX2...]|all]",
@@ -32,18 +38,20 @@ module ElasticBackup
                    desc: "Dry run, do not actually execute."
 
       desc 'snapshot [ES S3URL]', 'Backups Elasticsearch indices to S3'
-      def snapshot(es: 'localhost', surl: nil)
+      def snapshot es, s3url
+        Snapshot.snapshot Snapshot.esurl(suri: es), s3url, options
       end
 
-      desc 'restore', 'Restore indices from S3 to Elasticsearch.'
-      def restore
+      desc 'restore [S3URL ES]', 'Restore indices from S3 to Elasticsearch.'
+      def restore s3url, es
+        Snapshot.restore s3url, Snapshot.esurl(es), options
       end
       
-      desc 'monitor', 'Monitor the progress of an ongoing snapshot or restore.'
-      def monitor
+      desc 'monitor [ES, SNAPSHOT]', 'Not Implemented Yet -- Monitor the progress of an ongoing snapshot or restore.'
+      def monitor 
       end
 
-      desc 'delete', 'Delete snapshots, indicies, registrations'
+      desc 'delete', 'Not Implemented Yet -- Delete snapshots, indicies, registrations'
       subcommand 'delete', Delete
 
       desc 'list', 'list indicies, snapshots'

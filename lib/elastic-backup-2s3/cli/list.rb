@@ -32,8 +32,8 @@ module ElasticBackup
       end
 
       desc 'snaphots [S3URL]', 'List all snapshots or clusters stored at S3URL. A cluster is assumed to be a collection of clusters within the S3URL, each containing one or more snapshots.'
-      option :detailed, type: :boolean, aliases: '-d', desc: "Give full detailed dump of the snapshots.", default: false
-      option :clusters, type: :boolean, aliases: '-c', desc: "List clusters instead of snapshots. NOT SUPPORTED YET", default: false
+      #option :detailed, type: :boolean, aliases: '-d', desc: "Give full detailed dump of the snapshots.", default: false
+      #option :clusters, type: :boolean, aliases: '-c', desc: "List clusters instead of snapshots. NOT SUPPORTED YET", default: false
       def snapshots surl
         bucket_name, path, snapshot = Snapshot.s3url_splice surl
         puts "from bucket #{bucket_name}, path #{path}" unless options[:verbose] < 1

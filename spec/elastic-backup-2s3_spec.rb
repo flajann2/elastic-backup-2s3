@@ -22,9 +22,6 @@ describe Snapshot do
 
   it "has a valid s3 resource" do
     expect(s3 = Snapshot.s3).to_not be nil
-    s3.buckets.each do |b|
-      pp b
-    end    
   end
 
   it "has a valid Elastic resource" do
