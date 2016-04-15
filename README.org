@@ -12,6 +12,10 @@
   snapshots. I may add support at a later date. Or
   feel free to add it and do a pull request.
 
+  There are many features I wish to add to this, and
+  if you have any suggestions, please feel free to send
+  them my way!
+
 ** Overview
    Elastic Backup simply allows you to specifiy some
    or all of the indicies, some target bucket, and 
@@ -22,22 +26,69 @@
    itself and remove the registration if you did not
    specify a name for the registration.
 
-   The snapshot name, if not specified, will 
-   automatically be generated in the ISO date and time
-   format, with dashes substituting for the other
-   non-digit characters, wthe the date and time
-   seperated by an underscore. For instance:
-
-   2016-04-13_06-56-58
-
 ** TODO Documentation
-** TODO Examples
+   Documentation is comming. Basically,
+   just running the command without any parameters
+   will give you some basic usage. 
+
+*** S3URL format
+    We adopt a convention to make it easy for you
+    to specify the S3 bucket, path, and snapshot
+    name stored in the bucket. The S3 URL format is:
+
+    s3://AWS_S3_BUCKET/path/in/bucket:SNAPSHOT
+
+    In some cases, :SNAPSHOT is optional, but usually
+    expected to be there.
+
+** Examples
+   To backup/snapshot your ES to S3
+   and wait until the backup is completed:
+   #+BEGIN_SRC bash
+   es-snapshot snapshot localhost s3://your-backup-bucket/your-backup-path:snap_1 -v2 -w
+   #+END_SRC
+   
+   The default repository of 'elastic-backup' is used.
+   To specify your own repository name:
+   #+BEGIN_SRC bash
+   es-snapshot snapshot localhost s3://your-backup-bucket/your-backup-path:snap_1 -v2 -w --repo your-repo-name
+   #+END_SRC
+
+
+   To backup/snapshot two indices index1 and index2:
+   #+BEGIN_SRC bash
+   es-snapshot snapshot localhost s3://your-backup-bucket/your-backup-path:snap_1 -v2 -w --indices index1 index2
+   #+END_SRC
+
+   To restore your snapshot
+   #+BEGIN_SRC bash
+   es-snapshot restore s3://your-backup-bucket/your-backup-path:snap_1 localhost -v2 -w
+   #+END_SRC
+
+   To restore your snapshot using your-repo-name:
+   #+BEGIN_SRC bash
+   es-snapshot restore s3://your-backup-bucket/your-backup-path:snap_1 localhost -v2 -w --repo your-repo-name
+   #+END_SRC
+   
+   You may specify --dryrun (-u) to see the JSON that will
+   be sent without actually executing the commands. Also
+   -v2 will show you the same while allowing your 
+   commands to execute.
+
+   To see the status of your snapshots:
+   #+BEGIN_SRC bash
+   es-snapshot list status localhost
+   #+END_SRC
+
+   To see a list of your indices:
+   #+BEGIN_SRC bash
+   es-snapshot list indices localhost
+   #+END_SRC
+
 ** Scratchpad
    My own personal notes on this project. These
    are not gauranteed to be useful to you nor 
    up-to-date.
-*** s3url format
-    s3://BUCKET/path/in/bucket:SNAPSHOT
 
 ** Contributing to elastic-backup-2s3
 
