@@ -15,6 +15,26 @@ module ElasticBackup
         @opt ||= options
       end
 
+      # return a pretty time format from milliseconds
+      def pretty_time(milliseconds)
+        secs  = milliseconds / 1000
+        mins  = secs / 60
+        hours = mins / 60
+        days  = hours / 24
+
+        if days > 0
+          "#{days} days #{hours % 24} hours"
+        elsif hours > 0
+          "#{hours} hours #{mins % 60} mimutes"
+        elsif mins > 0
+          "#{mins} minutes #{secs % 60} seconds"
+        elsif secs > 0
+          "#{secs} seconds"
+        else
+          "#{milliseconds} milliseconds"
+        end
+      end
+
       # Take the s3 url and break it down to
       # its components [BUCKET, PATH, SNAPSHOT]
       def s3url_splice(surl)

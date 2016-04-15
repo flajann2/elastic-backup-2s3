@@ -54,11 +54,12 @@ module ElasticBackup
                                                    snapshot: '_all')
         unless options[:detailed]
           table = Text::Table.new
-          table.head = ['Snapshot', 'State', 'Started']
+          table.head = ['Snapshot', 'State', 'Started', 'Duration']
           table.rows = statuses['snapshots'].map { |s|
             [s["snapshot"],
              s["state"],
-             s["start_time"]]
+             s["start_time"],
+             s['end_time_in_millis'].nil? ? 'N/A' : Snapshot.pretty_time(s['end_time_in_millis'] - s['start_time_in_millis']) ]
           }
           puts table
         else
