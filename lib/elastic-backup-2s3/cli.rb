@@ -28,7 +28,7 @@ module ElasticBackup
                    desc: "Explicit operation timeout for connection to master node.",
                    aliases: '-t', default: 60
 
-      class_option :indicies,  type: :array,   aliases: ['-i', '--indexes'],
+      class_option :indices,  type: :array,   aliases: ['-i', '--indexes'],
                    banner: "[INDEX1[ INDEX2...]|all]",
                    required: false,
                    desc: 'A list of indices to snapshot'

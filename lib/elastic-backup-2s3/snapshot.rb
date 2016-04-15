@@ -38,33 +38,42 @@ module ElasticBackup
       # For now, this will overwrite the repo if it is
       # there already.
       def set_repository s3url
-        bucket, base_path, snapname = s3url_splice s3url
-        raise "Must specify :SNAPSHOTNAME at the end of your S3URL #{s3url}" if snapname.nil?
-        settings = { 
-          bucket: bucket,
-          base_path: base_path
-        }
-        settings[:indices] = opt[:indices].join(',') unless opt[:indices].nil?
-
+        bucket, base_path, _ignore = s3url_splice s3url
         cmd = { repository: opt[:repo], 
-          snapshot: snapname,
           body: {
             type: 's3',
+            settings:  { 
+              bucket: bucket,
+              base_path: base_path
+            }}}
+        ap cmd if opt[:dryrun] || (opt[:verbose] >= 2)
+        elastic.snapshot.create_repository(cmd) unless opt[:dryrun]
+      end
+
+      def initiate_snapshot s3url
+        _ignore, _ignore, snapname = s3url_splice s3url
+        raise "Must specify :SNAPSHOTNAME at the end of your S3URL #{s3url}" if snapname.nil?
+
+        cmd = { 
+          repository: opt[:repo], 
+          snapshot: snapname,
+          body: {
             wait_for_completion: opt[:wait],
             master_timeout: opt[:timeout],
-            settings: settings}}
+            }}
+        cmd[:body][:indices] = opt[:indices].join(',') unless opt[:indices].nil?
         ap cmd if opt[:dryrun] || (opt[:verbose] >= 2)
-
-        elastic.snapshot.create(cmd) unless opt[:dryrun]
+        elastic.snapshot.create(cmd)
       end
 
       # Do a snapshot of an elasticsearch cluster
       def snapshot esurl, s3url, options
         elastic esurl
         set_opts(options)
-        set_repository s3url
 
-        # Set registration
+        set_repository s3url
+        initiate_snapshot s3url
+
         # Initiate the backup
         # Wait and monitor
       end
