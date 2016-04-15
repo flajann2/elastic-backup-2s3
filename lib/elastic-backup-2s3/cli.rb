@@ -44,7 +44,7 @@ module ElasticBackup
 
       desc 'restore [S3URL ES]', 'Restore indices from S3 to Elasticsearch.'
       def restore s3url, es
-        Snapshot.restore s3url, Snapshot.esurl(es), options
+        Snapshot.restore s3url, Snapshot.esurl(suri: es), options
       end
       
       desc 'monitor [ES, SNAPSHOT]', 'Not Implemented Yet -- Monitor the progress of an ongoing snapshot or restore.'

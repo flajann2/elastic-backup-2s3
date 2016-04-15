@@ -47,9 +47,11 @@ module ElasticBackup
               base_path: base_path
             }}}
         ap cmd if opt[:dryrun] || (opt[:verbose] >= 2)
-        ret = MultiJson.load elastic.snapshot.create_repository(cmd) unless opt[:dryrun]
-        ap ret unless opt[:verbose] < 2
-        raise "Error #{ret['status']} detected: #{ret['error']}" unless ret['error'].nil?
+        unless opt[:dryrun]
+          ret = MultiJson.load elastic.snapshot.create_repository(cmd)
+          ap ret unless opt[:verbose] < 2
+          raise "Error #{ret['status']} detected: #{ret['error']}" unless ret['error'].nil?
+        end
       end
 
       def initiate_snapshot s3url
@@ -64,9 +66,11 @@ module ElasticBackup
           body: {}}
         cmd[:body][:indices] = opt[:indices].join(',') unless opt[:indices].nil?
         ap cmd if opt[:dryrun] || (opt[:verbose] >= 2)
-        ret = MultiJson.load elastic.snapshot.create(cmd) unless opt[:dryrun]
-        ap ret unless opt[:verbose] < 2
-        raise "Error #{ret['status']} detected: #{ret['error']}" unless ret['error'].nil?
+        unless opt[:dryrun]
+          ret = MultiJson.load elastic.snapshot.create(cmd)
+          ap ret unless opt[:verbose] < 2
+          raise "Error #{ret['status']} detected: #{ret['error']}" unless ret['error'].nil?
+        end
       end
 
       def initiate_restore s3url
@@ -80,9 +84,11 @@ module ElasticBackup
           master_timeout: opt[:timeout]
         }
         ap cmd if opt[:dryrun] || (opt[:verbose] >= 2)
-        ret = MultiJson.load elastic.snapshot.restore(cmd) unless opt[:dryrun]
-        ap ret unless opt[:verbose] < 2
-        raise "Error #{ret['status']} detected: #{ret['error']}" unless ret['error'].nil?
+        unless opt[:dryrun]
+          ret = MultiJson.load elastic.snapshot.restore(cmd)
+          ap ret unless opt[:verbose] < 2
+          raise "Error #{ret['status']} detected: #{ret['error']}" unless ret['error'].nil?
+        end
       end
 
       # Do a snapshot of an elasticsearch cluster
