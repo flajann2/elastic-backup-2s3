@@ -12,8 +12,8 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.authors = ["Fred Mitchell"]
   s.date = "2016-04-15"
-  s.description = "TODO: longer description of your gem"
-  s.email = "lordalveric@yahoo.com"
+  s.description = "\n  I simply want to be able to control the backup and\n  restoration of the Elasticsearch cluster to S3\n  without any fuss or having to dilly around with\n  curl -XPUTS and friends.\n\n  So here it is, and I make no apologies about not \n  supporting the \"shared volume\" option of Elasticsearch\n  snapshots. I may add support at a later date. Or\n  feel free to add it and do a pull request.\n\n  There are many features I wish to add to this, and\n  if you have any suggestions, please feel free to send\n  them my way!"
+  s.email = "fred.mitchell@gmx.de"
   s.executables = ["es-snapshot"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -43,7 +43,7 @@ Gem::Specification.new do |s|
   s.licenses = ["MIT"]
   s.required_ruby_version = Gem::Requirement.new(">= 2.0")
   s.rubygems_version = "2.5.1"
-  s.summary = "TODO: one-line summary of your gem"
+  s.summary = "Elasticsearch to AWS S3 Backup, Snapshotting, and Restore Tool"
 
   if s.respond_to? :specification_version then
     s.specification_version = 4
