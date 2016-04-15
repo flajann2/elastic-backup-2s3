@@ -43,6 +43,29 @@ module ElasticBackup
           ob.key.split('snapshot-').last
         }
       end
+
+      desc 'status [ES]', 'List the status of the snapshots on the given ES cluster.'
+      option :detailed, type: :boolean, aliases: '-d', desc: "Give full detailed dump of the status.", default: false
+      def status es = "localhost"
+        esurl = Snapshot.esurl suri: es
+        puts "query #{esurl}" unless options[:verbose] < 1
+        cli = Snapshot.elastic esurl
+        statuses = MultiJson.load cli.snapshot.get(repository: options[:repo],
+                                                   snapshot: '_all')
+        unless options[:detailed]
+          table = Text::Table.new
+          table.head = ['Snapshot', 'State', 'Started']
+          table.rows = statuses['snapshots'].map { |s|
+            [s["snapshot"],
+             s["state"],
+             s["start_time"]]
+          }
+          puts table
+        else
+          ap statuses
+        end
+
+      end
     end
   end
 end

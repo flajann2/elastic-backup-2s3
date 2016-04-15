@@ -74,18 +74,15 @@ module ElasticBackup
       def snapshot esurl, s3url, options
         elastic esurl
         set_opts(options)
-
         set_repository s3url
         initiate_snapshot s3url
-
-        # Initiate the backup
-        # Wait and monitor
       end
       
       def restore s3url, esurl, options
         elastic esurl
         set_opts(options)
         set_repository s3url
+        initiate_restore s3url
       end
     end
 
