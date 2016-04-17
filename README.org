@@ -98,6 +98,18 @@
    es-snapshot list indices localhost
    #+END_SRC
 
+** Release Notes
+   |       Date | Version | Description                                                             |
+   |------------+---------+-------------------------------------------------------------------------|
+   | 2016-04-17 | v0.0.3  | Added a delete snapshot option to allow deletion of a running snapshot. |
+   |            |         |                                                                         |
+** Known Issues
+   |       Date | Version | Description                                                                  |
+   | 2061-04-17 | v0.0.3  | 'delete' options not fully implemented.                                      |
+   |            |         | Error return codes not fully fleshed out                                     |
+   |            |         | 'delete snapshot' requires the full S3URL, but only needs the snapshot part. |
+   |            |         |                                                                              |
+
 ** Scratchpad
    My own personal notes on this project. These
    are not gauranteed to be useful to you nor 

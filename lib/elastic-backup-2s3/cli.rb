@@ -47,11 +47,7 @@ module ElasticBackup
         Snapshot.restore s3url, Snapshot.esurl(suri: es), options
       end
       
-      desc 'monitor [ES, SNAPSHOT]', 'Not Implemented Yet -- Monitor the progress of an ongoing snapshot or restore.'
-      def monitor 
-      end
-
-      desc 'delete', 'Not Implemented Yet -- Delete snapshots, indicies, registrations'
+      desc 'delete', 'Delete snapshots and repositories'
       subcommand 'delete', Delete
 
       desc 'list', 'list indicies, snapshots'
