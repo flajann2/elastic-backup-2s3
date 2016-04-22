@@ -8,6 +8,7 @@ gem "faraday",  "~> 0"
 gem "activesupport", "~> 4"
 gem "awesome_print",  "~> 1"
 gem "text-table",  "~> 1"
+gem "thor", "~> 0"
 
 group :development do
   gem "rspec", "~> 2.8.0"
