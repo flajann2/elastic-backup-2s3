@@ -7,14 +7,8 @@
   without any fuss or having to dilly around with
   curl -XPUTS and friends.
 
-  So here it is, and I make no apologies about not 
-  supporting the "shared volume" option of Elasticsearch
-  snapshots. I may add support at a later date. Or
-  feel free to add it and do a pull request.
-
-  There are many features I wish to add to this, and
-  if you have any suggestions, please feel free to send
-  them my way!
+  I have finally added Shared Filesystem Support!
+  Please see the docs below on this.
 
 ** Overview
    Elastic Backup simply allows you to specifiy some
@@ -38,7 +32,6 @@
    gem  'elastic-backup-2s3'
    #+end_src
 
-
 ** TODO Documentation
    Documentation is comming. Basically,
    just running the command without any parameters
@@ -53,6 +46,37 @@
 
     In some cases, :SNAPSHOT is optional, but usually
     expected to be there.
+
+*** Support for Shared Filesystem Snapshots
+    To do S3 backups requires no additional configurations
+    outside of being in the AWS clould (or at least being
+    connected to one.) Shared File System (FS) backups require
+    that you have each and every node configured to permit
+    the backup path on all your nodes in the cluster, and
+    thus not as simple as merely writing it through the
+    JSON REST interface.
+
+    So presumably you either have this setup in place, and
+    in any rate, it would be a bit messy to have to specify
+    the "local" path in the repo here.
+
+    For this reason we will not (over)write the repo settings
+    for FS backups by default. We provide a new option that will
+    allow you to write out the FS repo, specifying all the
+    parameters you need to at that time.
+
+    The default repository name should be configurable in any case.
+    we could do a configuration file, but for this I think it's 
+    overkill. so we will use environment variables instead.
+
+    | Environment variable       | Description                                                                                                |
+    |----------------------------+------------------------------------------------------------------------------------------------------------|
+    | ESB_DEFAULT_REPO           | Changes the default repository from 'elastic-backup' to what is specified here.                            |
+    | ESB_SHARED_VOLUME          | For Shared Volume backups, default local path to use. Note that this path must be configured on all nodes. |
+    | ESB_TIMEOUT                | Default for --timeout option                                                                               |
+    | ESB_SNAPSHOT_MAX_BYTES_SEC | Shared Volume max_snapshot_bytes_per_sec                                                                   |
+    | ESB_RESTORE_MAX_BYTES_SEC  | Shared Volume max_restore_bytes_per_sec                                                                    |
+    |                            |                                                                                                            |
 
 ** Examples
    To backup/snapshot your ES to S3
@@ -102,13 +126,16 @@
    |       Date | Version | Description                                                             |
    |------------+---------+-------------------------------------------------------------------------|
    | 2016-04-17 | v0.0.3  | Added a delete snapshot option to allow deletion of a running snapshot. |
+   | 2016-04-22 | v0.1.0  | Support for FS volume backups added                                     |
    |            |         |                                                                         |
 ** Known Issues
-   |       Date | Version | Description                                                                  |
-   | 2061-04-17 | v0.0.3  | 'delete' options not fully implemented.                                      |
-   |            |         | Error return codes not fully fleshed out                                     |
-   |            |         | 'delete snapshot' requires the full S3URL, but only needs the snapshot part. |
-   |            |         |                                                                              |
+   |       Date | Version | Description                                                                                                                                                                                   |
+   | 2061-04-17 | v0.0.3  | 'delete' options not fully implemented.                                                                                                                                                       |
+   |            |         | Error return codes not fully fleshed out                                                                                                                                                      |
+   |            |         | 'delete snapshot' requires the full S3URL, but only needs the snapshot part.                                                                                                                  |
+   | 2061-04-21 | v0.0.4  | Some features remain unimplemented, though there are options for them. Please bear with me.                                                                                                   |
+   |            |         | What shall we do with configurations? I am thinking we save them in ES, but also allow for config files. The ES settings will override the config file settings. Config files in Yaml format. |
+   |            |         |                                                                                                                                                                                               |
 
 ** Scratchpad
    My own personal notes on this project. These

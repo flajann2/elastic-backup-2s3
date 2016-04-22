@@ -57,15 +57,26 @@ module ElasticBackup
 
       # For now, this will overwrite the repo if it is
       # there already.
-      def set_repository s3url
+      def set_repository s3url, opt
         bucket, base_path, _ignore = s3url_splice s3url
         cmd = { repository: opt[:repo], 
-          body: {
-            type: 's3',
-            settings:  { 
-              bucket: bucket,
-              base_path: base_path
-            }}}
+          body: unless opt[:fs]
+                  {
+              type: 's3',
+              settings:  { 
+                bucket: bucket,
+                base_path: base_path
+              }}
+                else
+                  {
+              type: 'fs',
+              settings:  { 
+                location: [opt[:sharedvol], opt[:postamble]].compact.join('/'),
+                max_snapshot_bytes_per_sec: opt[:snapmax], 
+                max_restore_bytes_per_sec:  opt[:remax]    
+              }}
+                end
+        }
         ap cmd if opt[:dryrun] || (opt[:verbose] >= 2)
         unless opt[:dryrun]
           ret = MultiJson.load elastic.snapshot.create_repository(cmd)

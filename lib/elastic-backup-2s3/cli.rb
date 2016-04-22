@@ -18,15 +18,42 @@ module ElasticBackup
       class_option :repo, type: :string, 
                    aliases: '-r',
                    banner: "[NAME]",
-                   default: 'elastic-backup',
-                   desc: "Repository name to use."
+                   default: ENV['ESB_DEFAULT_REPO'] || 'elastic-backup',
+                   desc: "Repository name to use. Use the environment variable ESB_DEFAULT_REPO to change this default."
+
+      class_option :fs, type: :boolean, 
+                   desc: "Shared File System Backup. The environment variable ESB_SHARED_VOLUME must be set and also OR you can use the --sharedvol option."
+
+      class_option :sharedvol, type: :string, 
+                   aliases: '-V',
+                   banner: "[ABSOLUTE_PATH_ON_NODES]",
+                   default: ENV['ESB_SHARED_VOLUME'] || 'You Must Set Me for --fs Option.',
+                   desc: "for the --fs setting, shared volume path that is set up on all the nodes in your cluster. MUST BE SET for FS snapshots. Use the environment variabe ESB_SHARED_VOLUME to avoid setting that here."
+
+      class_option :snapmax, type: :string, 
+                   aliases: '-S',
+                   banner: "[BYTES_PER_SECOND]",
+                   default: ENV['ESB_SNAPSHOT_MAX_BYTES_SEC'] || '500mb',
+                   desc: "For the --fs setting, the maximum bytes per second on snaphot creation."
+
+      class_option :remax, type: :string, 
+                   aliases: '-R',
+                   banner: "[BYTES_PER_SECOND]",
+                   default: ENV['ESB_RESTORE_MAX_BYTES_SEC'] || '500mb',
+                   desc: "For the --fs setting, the maximum bytes per second on snapshot restoration."
+
+      #class_option :saveconf,
+      #             aliases: '-s',
+      #             type: :boolean,
+      #             desc: "Save ES Snapshot Configuration to the ES cluster.",
+      #             default: false
 
       class_option :monitor, type: :boolean, aliases: '-m', desc: "Monitor the progress.", default: false
       class_option :wait, type: :boolean, aliases: '-w', desc: "Wait for completion.", default: false
       class_option :timeout, type: :numeric,
                    banner: '[SECONDS]',
-                   desc: "Explicit operation timeout for connection to master node.",
-                   aliases: '-t', default: 60
+                   desc: "Explicit operation timeout for connection to master node. Use the environment variable ESB_TIMEOUT to change this default.",
+                   aliases: '-t', default: ENV['ESB_TIMEOUT'] || 60
 
       class_option :indices,  type: :array,   aliases: ['-i', '--indexes'],
                    banner: "[INDEX1[ INDEX2...]|all]",
@@ -37,12 +64,12 @@ module ElasticBackup
                    aliases: '-u',
                    desc: "Dry run, do not actually execute."
 
-      desc 'snapshot [ES S3URL]', 'Backups Elasticsearch indices to S3'
+      desc 'snapshot [ES [S3URL|POSTAMBLE]]', 'Backups Elasticsearch indices to S3 or Shared Volume. The POSTAMBLE is appended to the Shared Volume path. Simply make it a "." if none.'
       def snapshot es, s3url
         Snapshot.snapshot Snapshot.esurl(suri: es), s3url, options
       end
 
-      desc 'restore [S3URL ES]', 'Restore indices from S3 to Elasticsearch.'
+      desc 'restore [[S3URL|POSTAMBLE] ES]', 'Restore indices from S3 or Shared Volume to Elasticsearch.  The POSTAMBLE is appended to the Shared Volume path. Simply make it a "." if none.'
       def restore s3url, es
         Snapshot.restore s3url, Snapshot.esurl(suri: es), options
       end
