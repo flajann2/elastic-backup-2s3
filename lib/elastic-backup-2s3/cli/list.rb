@@ -52,6 +52,7 @@ module ElasticBackup
         cli = Snapshot.elastic esurl
         statuses = MultiJson.load cli.snapshot.get(repository: options[:repo],
                                                    snapshot: '_all')
+        raise statuses['error'] unless statuses['error'].nil?
         unless options[:detailed]
           table = Text::Table.new
           table.head = ['Snapshot', 'State', 'Started', 'Duration']
