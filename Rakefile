@@ -31,10 +31,8 @@ Juwelier::Tasks.new do |gem|
   without any fuss or having to dilly around with
   curl -XPUTS and friends.
 
-  So here it is, and I make no apologies about not 
-  supporting the "shared volume" option of Elasticsearch
-  snapshots. I may add support at a later date. Or
-  feel free to add it and do a pull request.
+  So here it is, and we now support Shared Volumes. See
+  the docs on the --fs flag.
 
   There are many features I wish to add to this, and
   if you have any suggestions, please feel free to send

@@ -37,7 +37,7 @@ module ElasticBackup
 
       # Take the s3 url and break it down to
       # its components [BUCKET, PATH, SNAPSHOT]
-      def s3url_splice(surl)
+      def snapurl_splice(surl)
         protocol, b, snapshot = surl.split(':')
         empty, empty, bucket, path = b.split('/', 4)
         raise "Protocol must be 's3' in #{surl}" unless protocol.downcase == 's3'
@@ -57,8 +57,8 @@ module ElasticBackup
 
       # For now, this will overwrite the repo if it is
       # there already.
-      def set_repository s3url, opt
-        bucket, base_path, _ignore = opt[:fs] ? [nil, nil, nil] : s3url_splice(s3url)
+      def set_repository snapurl, opt
+        bucket, base_path, _ignore = opt[:fs] ? [nil, nil, nil] : snapurl_splice(snapurl)
         cmd = { repository: opt[:repo], 
           body: unless opt[:fs]
                   {
@@ -85,9 +85,9 @@ module ElasticBackup
         end
       end
 
-      def initiate_snapshot s3url
-        _ignore, _ignore, snapname = (opt[:fs] ? [nil, nil, s3url] : s3url_splice(s3url))
-        raise "Must specify :SNAPSHOTNAME at the end of your S3URL #{s3url}" if snapname.nil?
+      def initiate_snapshot snapurl
+        _ignore, _ignore, snapname = (opt[:fs] ? [nil, nil, snapurl] : snapurl_splice(snapurl))
+        raise "Must specify :SNAPSHOTNAME at the end of your S3URL #{snapurl}" if snapname.nil?
 
         cmd = { 
           repository: opt[:repo], 
@@ -104,9 +104,9 @@ module ElasticBackup
         end
       end
 
-      def initiate_restore s3url
-        _ignore, _ignore, snapname = (opt[:fs] ? [nil, nil, s3url] : s3url_splice(s3url))
-        raise "Must specify :SNAPSHOTNAME at the end of your S3URL #{s3url}" if snapname.nil?
+      def initiate_restore snapurl
+        _ignore, _ignore, snapname = (opt[:fs] ? [nil, nil, snapurl] : snapurl_splice(snapurl))
+        raise "Must specify :SNAPSHOTNAME at the end of your S3URL #{snapurl}" if snapname.nil?
 
         cmd = {
           repository: opt[:repo], 
@@ -123,18 +123,18 @@ module ElasticBackup
       end
 
       # Do a snapshot of an elasticsearch cluster
-      def snapshot esurl, s3url, options
+      def snapshot esurl, snapurl, options
         elastic esurl
         set_opts(options)
-        set_repository s3url, options
-        initiate_snapshot s3url
+        set_repository snapurl, options
+        initiate_snapshot snapurl
       end
       
-      def restore s3url, esurl, options
+      def restore snapurl, esurl, options
         elastic esurl
         set_opts(options)
-        set_repository s3url
-        initiate_restore s3url
+        set_repository snapurl, options
+        initiate_restore snapurl
       end
     end
 
