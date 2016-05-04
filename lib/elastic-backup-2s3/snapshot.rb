@@ -58,7 +58,7 @@ module ElasticBackup
       # For now, this will overwrite the repo if it is
       # there already.
       def set_repository s3url, opt
-        bucket, base_path, _ignore = s3url_splice s3url
+        bucket, base_path, _ignore = opt[:fs] ? [nil, nil, nil] : s3url_splice(s3url)
         cmd = { repository: opt[:repo], 
           body: unless opt[:fs]
                   {
@@ -86,7 +86,7 @@ module ElasticBackup
       end
 
       def initiate_snapshot s3url
-        _ignore, _ignore, snapname = s3url_splice s3url
+        _ignore, _ignore, snapname = (opt[:fs] ? [nil, nil, s3url] : s3url_splice(s3url))
         raise "Must specify :SNAPSHOTNAME at the end of your S3URL #{s3url}" if snapname.nil?
 
         cmd = { 
@@ -105,10 +105,10 @@ module ElasticBackup
       end
 
       def initiate_restore s3url
-        _ignore, _ignore, snapname = s3url_splice s3url
+        _ignore, _ignore, snapname = (opt[:fs] ? [nil, nil, s3url] : s3url_splice(s3url))
         raise "Must specify :SNAPSHOTNAME at the end of your S3URL #{s3url}" if snapname.nil?
 
-        cmd = { 
+        cmd = {
           repository: opt[:repo], 
           snapshot: snapname,
           wait_for_completion: opt[:wait],
@@ -126,7 +126,7 @@ module ElasticBackup
       def snapshot esurl, s3url, options
         elastic esurl
         set_opts(options)
-        set_repository s3url
+        set_repository s3url, options
         initiate_snapshot s3url
       end
       
