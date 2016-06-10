@@ -59,7 +59,8 @@ module ElasticBackup
       # there already.
       def set_repository snapurl, opt
         bucket, base_path, _ignore = opt[:fs] ? [nil, nil, nil] : snapurl_splice(snapurl)
-        cmd = { repository: opt[:repo], 
+        Elasticsearch::API.settings[:skip_parameter_validation] = true
+        cmd = { repository: opt[:repo], verify: (not opt[:nv]),
           body: unless opt[:fs]
                   {
               type: 's3',

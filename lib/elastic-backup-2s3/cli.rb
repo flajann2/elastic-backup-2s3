@@ -24,6 +24,9 @@ module ElasticBackup
       class_option :fs, type: :boolean, 
                    desc: "Shared File System Backup. The environment variable ESB_SHARED_VOLUME must be set and also OR you can use the --sharedvol option."
 
+      class_option :nv, type: :boolean, default: false,
+                   desc: "Switch off the verify for Shared File System backups and restores. This option is NOT RECOMMENDED, but might be needed in some cases."
+
       class_option :sharedvol, type: :string, 
                    aliases: '-V',
                    banner: "[ABSOLUTE_PATH_ON_NODES]",
@@ -41,12 +44,6 @@ module ElasticBackup
                    banner: "[BYTES_PER_SECOND]",
                    default: ENV['ESB_RESTORE_MAX_BYTES_SEC'] || '500mb',
                    desc: "For the --fs setting, the maximum bytes per second on snapshot restoration."
-
-      #class_option :saveconf,
-      #             aliases: '-s',
-      #             type: :boolean,
-      #             desc: "Save ES Snapshot Configuration to the ES cluster.",
-      #             default: false
 
       class_option :monitor, type: :boolean, aliases: '-m', desc: "Monitor the progress.", default: false
       class_option :wait, type: :boolean, aliases: '-w', desc: "Wait for completion.", default: false

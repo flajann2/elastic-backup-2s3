@@ -125,6 +125,7 @@
 ** Release Notes
    |       Date | Version | Description                                                             |
    |------------+---------+-------------------------------------------------------------------------|
+   | 2016-06-10 | v0.1.3  | Added a new --nv flag to switch off shared FS verification.             |
    | 2016-05-02 | v0.1.2  | Fixed a couple of minor issues with the restore from shared volume.     |
    | 2016-04-22 | v0.1.0  | Support for FS volume backups added                                     |
    | 2016-04-17 | v0.0.3  | Added a delete snapshot option to allow deletion of a running snapshot. |
