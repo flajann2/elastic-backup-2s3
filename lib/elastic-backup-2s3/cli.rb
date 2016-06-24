@@ -6,10 +6,6 @@ require_relative 'cli/list'
 module ElasticBackup
   module Cli
     class Main < Thor
-      long_desc <<-LONGDESC
-        Main long desc
-      LONGDESC
-
       class_option :verbose, type: :numeric, 
                    banner: '[1|2|3]',
                    desc: "Verbosity setting.",

@@ -2,7 +2,7 @@
 module ElasticBackup
   module Cli
     class Delete < Thor
-      desc 'snapshot [ES S3URL]', 'Delete a snapshot or kill one in progress.'
+      desc 'snapshot [ES S3URL|POSTAMBLE]', 'Delete a snapshot or kill one in progress.'
       option :repo, type: :string, 
                    aliases: '-r',
                    banner: "[NAME]",
