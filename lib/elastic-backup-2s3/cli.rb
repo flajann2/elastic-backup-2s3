@@ -63,6 +63,8 @@ module ElasticBackup
       end
 
       desc 'restore [[S3URL|POSTAMBLE] ES]', 'Restore indices from S3 or Shared Volume to Elasticsearch.  The POSTAMBLE is appended to the Shared Volume path. Simply make it a "." if none.'
+      long_desc S3POSTDOCS
+      
       def restore s3url, es
         Snapshot.restore s3url, Snapshot.esurl(suri: es), options
       end
