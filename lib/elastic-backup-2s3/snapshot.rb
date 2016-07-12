@@ -113,8 +113,9 @@ module ElasticBackup
           repository: opt[:repo], 
           snapshot: snapname,
           wait_for_completion: opt[:wait],
-          master_timeout: opt[:timeout]
-        }
+          master_timeout: opt[:timeout],
+          body: {}}
+        cmd[:body][:indices] = opt[:indices].join(',') unless opt[:indices].nil?
         ap cmd if opt[:dryrun] || (opt[:verbose] >= 2)
         unless opt[:dryrun]
           ret = MultiJson.load elastic.snapshot.restore(cmd)
