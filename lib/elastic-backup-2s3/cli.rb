@@ -32,13 +32,13 @@ module ElasticBackup
       class_option :snapmax, type: :string, 
                    aliases: '-S',
                    banner: "[BYTES_PER_SECOND]",
-                   default: ENV['ESB_SNAPSHOT_MAX_BYTES_SEC'] || '500mb',
+                   default: ENV['ESB_SNAPSHOT_MAX_BYTES_SEC'] || '15000mb',
                    desc: "For the --fs setting, the maximum bytes per second on snaphot creation."
 
       class_option :remax, type: :string, 
                    aliases: '-R',
                    banner: "[BYTES_PER_SECOND]",
-                   default: ENV['ESB_RESTORE_MAX_BYTES_SEC'] || '500mb',
+                   default: ENV['ESB_RESTORE_MAX_BYTES_SEC'] || '15000mb',
                    desc: "For the --fs setting, the maximum bytes per second on snapshot restoration."
 
       class_option :monitor, type: :boolean, aliases: '-m', desc: "Monitor the progress.", default: false
