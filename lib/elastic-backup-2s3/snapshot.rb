@@ -66,13 +66,13 @@ module ElasticBackup
               type: 's3',
               settings:  { 
                 bucket: bucket,
-                base_path: "#{base_path}/#{opt[:repo]}"
+                base_path: [base_path, opt[:repo]].compact.join('/')
               }}
                 else
                   {
               type: 'fs',
               settings:  { 
-                location: ["#{opt[:sharedvol]}/#{opt[:repo]}", opt[:postamble]].compact.join('/'),
+                location: [opt[:sharedvol], opt[:repo], opt[:postamble]].compact.join('/'),
                 max_snapshot_bytes_per_sec: opt[:snapmax], 
                 max_restore_bytes_per_sec:  opt[:remax]    
               }}
