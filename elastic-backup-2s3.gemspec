@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
   s.authors = ["Fred Mitchell"]
-  s.date = "2016-07-20"
+  s.date = "2016-07-21"
   s.description = "\n  I simply want to be able to control the backup and\n  restoration of the Elasticsearch cluster to S3\n  without any fuss or having to dilly around with\n  curl -XPUTS and friends.\n\n  So here it is, and we now support Shared Volumes. See\n  the docs on the --fs flag.\n\n  There are many features I wish to add to this, and\n  if you have any suggestions, please feel free to send\n  them my way!"
   s.email = "fred.mitchell@gmx.de"
   s.executables = ["es-snapshot"]
